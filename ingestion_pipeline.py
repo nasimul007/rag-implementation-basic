@@ -37,6 +37,32 @@ def load_documents(docs_path="docs"):
     return documents
 
 
+def split_documents(documents, chunk_size=1000, chunk_overlap=0):
+    """Split documents into smaller chunks with overlap"""
+    print("\nSplitting documents into chunks...")
+    
+    text_splitter = CharacterTextSplitter(
+        chunk_size=chunk_size, 
+        chunk_overlap=chunk_overlap
+    )
+    
+    chunks = text_splitter.split_documents(documents)
+    
+    if chunks:
+        for i, chunk in enumerate(chunks[:5]):
+            print(f"\n--- Chunk {i+1} ---")
+            print(f"Source: {chunk.metadata['source']}")
+            print(f"Length: {len(chunk.page_content)} characters")
+            print(f"Content:")
+            print(chunk.page_content)
+            print("-" * 50)
+        
+        if len(chunks) > 5:
+            print(f"\n... and {len(chunks) - 5} more chunks")
+    
+    return chunks
+
+
 def ingestion_pipeline_main():
     """
     Main Ingestion Pipeline
@@ -49,6 +75,31 @@ def ingestion_pipeline_main():
 
     # Step 1: Load documents
     documents = load_documents(docs_path)
-    print("documents: ", documents)
-
     
+    # print("documents: ", documents)
+    # langchain document list
+    # documents = [
+    #    Document(
+    #        page_content="Google LLC is an American multinational corporation and technology company focusing on online advertising, search engine technology, cloud computing, computer software, quantum computing, e-commerce, consumer electronics, and artificial intelligence (AI).",
+    #        metadata={'source': 'docs/google.txt'}
+    #    ),
+    #    Document(
+    #        page_content="Microsoft Corporation is an American multinational corporation and technology conglomerate headquartered in Redmond, Washington.",
+    #        metadata={'source': 'docs/microsoft.txt'}
+    #    ),
+    #    Document(
+    #        page_content="Nvidia Corporation is an American technology company headquartered in Santa Clara, California.",
+    #        metadata={'source': 'docs/nvidia.txt'}
+    #    ),
+    #    Document(
+    #        page_content="Space Exploration Technologies Corp., commonly referred to as SpaceX, is an American space technology company headquartered at the Starbase development site in Starbase, Texas.",
+    #        metadata={'source': 'docs/spacex.txt'}
+    #    ),
+    #    Document(
+    #        page_content="Tesla, Inc. is an American multinational automotive and clean energy company headquartered in Austin, Texas.",
+    #        metadata={'source': 'docs/tesla.txt'}
+    #    )
+    # ]
+
+    # Step 2: Split into chunks
+    chunks = split_documents(documents)

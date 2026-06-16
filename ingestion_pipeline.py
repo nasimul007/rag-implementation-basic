@@ -3,6 +3,8 @@ from langchain_community.document_loaders import TextLoader, DirectoryLoader
 from langchain_text_splitters import CharacterTextSplitter
 from langchain_ollama import OllamaEmbeddings
 from langchain_chroma import Chroma
+from datetime import datetime
+
 # from langchain_core.documents import Document
 
 
@@ -63,6 +65,28 @@ def split_documents(documents, chunk_size=1000, chunk_overlap=0):
     return chunks
 
 
+def create_vector_store(chunks, persist_directory="db/chroma_db"):
+    """Create and persist ChromaDB vector store"""
+    print("Creating embeddings and storing in ChromaDB...")
+    print("Start Time: ", datetime.now().time())
+        
+    embedding_model = OllamaEmbeddings(model="embeddinggemma:latest")
+    
+    # Create ChromaDB vector store
+    print("--- Creating vector store ---")
+    vectorstore = Chroma.from_documents(
+        documents=chunks,
+        embedding=embedding_model,
+        persist_directory=persist_directory, 
+        collection_metadata={"hnsw:space": "cosine"}
+    )
+    print("--- Finished creating vector store ---")
+    print(f"Vector store created and saved to {persist_directory}")
+    print("End Time: ", datetime.now().time())
+
+    return vectorstore
+
+
 def ingestion_pipeline_main():
     """
     Main Ingestion Pipeline
@@ -75,7 +99,7 @@ def ingestion_pipeline_main():
 
     # Step 1: Load documents
     documents = load_documents(docs_path)
-    
+
     # print("documents: ", documents)
     # langchain document list
     # documents = [
@@ -103,3 +127,7 @@ def ingestion_pipeline_main():
 
     # Step 2: Split into chunks
     chunks = split_documents(documents)
+
+    # Step 3: Create vector store
+    vectorstore = create_vector_store(chunks, persistent_directory)
+    print("\nIngestion completed! Documents are now ready for RAG queries.")

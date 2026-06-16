@@ -1,5 +1,8 @@
+from ingestion_pipeline import ingestion_pipeline_main
+
+
 def main():
-    print("Hello from rag-implementation!")
+    ingestion_pipeline_main()
 
 
 if __name__ == "__main__":

@@ -1995,6 +1995,7 @@ dependencies = [
     { name = "langchain-community" },
     { name = "langchain-ollama" },
     { name = "langchain-text-splitters" },
+    { name = "python-dotenv" },
 ]
 
 [package.metadata]
@@ -2004,6 +2005,7 @@ requires-dist = [
     { name = "langchain-community", specifier = ">=0.4.2" },
     { name = "langchain-ollama", specifier = ">=1.1.0" },
     { name = "langchain-text-splitters", specifier = ">=1.1.2" },
+    { name = "python-dotenv", specifier = ">=1.2.2" },
 ]
 
 [[package]]

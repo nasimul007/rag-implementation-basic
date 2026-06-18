@@ -101,7 +101,7 @@ def ask_question(user_query):
     chat_history.append(HumanMessage(content=search_question))
     chat_history.append(AIMessage(content=answer))
 
-    print(f"\nchat_history: {chat_history}\n\n")
+    # print(f"\nchat_history: {chat_history}\n\n")
 
 def start_chat():
     print("Ask me questions! Type 'quit' to exit.\n")
